@@ -1,4 +1,3 @@
-
 const add = function (num1, oper, num2){
     return num1 + num2;
 }
@@ -27,8 +26,11 @@ const operate = function (num1, oper, num2){
     } else console.log('error');
 }
 
-const number = document.querySelector('.digit');
-number.addEventListener('click', () => {
-    const display = document.querySelector('#display');
-    display.textContent = `${button}`
+const numbers = document.querySelectorAll('.number');
+const display = document.querySelector('#display');
+numbers.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        let numSelection = event.target.id
+        display.textContent = `${numSelection}`
+    })
 });
