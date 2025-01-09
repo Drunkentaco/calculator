@@ -28,9 +28,25 @@ const operate = function (num1, oper, num2){
 
 const numbers = document.querySelectorAll('.number');
 const display = document.querySelector('#display');
+
+let i = 0
+
 numbers.forEach((button) => {
     button.addEventListener('click', (event) => {
-        let numSelection = event.target.id
-        display.textContent = `${numSelection}`
+        //Keep the number within 10 digit
+        while (i < 10){
+            const digit = document.createElement('div');
+            digit.classList.add('digit');
+            display.appendChild(digit);
+            i++
+    
+            let numSelection = event.target.name
+            digit.textContent = `${numSelection}`
+            
+            if (numSelection === ".") {
+                document.getElementById('dot').disabled='true'
+            }
+            break
+        }
     })
 });
