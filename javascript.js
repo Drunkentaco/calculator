@@ -1,9 +1,11 @@
+// Starting Storages and Booleans to make the calculator works
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
 let resetSwitich = false;
 let nextFirstNumber = false;
-
+let numberCheck = false;
+let signCheck = false;
 
 //button selectors
 const clear = document.querySelector('#clearBtn');
@@ -18,21 +20,23 @@ equal.addEventListener('click', () => {equalBtn()});
 const numberBtn = document.querySelectorAll('.numberBtn');
 numberBtn.forEach((button) => {
     button.addEventListener('click',() => {
-        displayNumber(button.name)
+        numberCheck = true;
+        displayNumber(button.name);
     });
 });
 const operatorBtn = document.querySelectorAll('.operator');
 operatorBtn.forEach((button) =>{
     button.addEventListener('click',() =>{
-        numberStorage(button.name)
+        operatorCheck(button.name);
     })
 })
 const display = document.querySelector('#display');
-display.textContent = 0
+display.textContent = 0;
 
 function displayNumber(num) {
+    //reset display after confirming firstNumber
     if (resetSwitich === true){
-        clearAll();
+        resetDisplay();
         resetSwitich = false;
     }
     // Keep numbers to 10 digits
@@ -52,6 +56,10 @@ function displayNumber(num) {
    }
 }
 
+function resetDisplay(){
+    display.textContent = '0';
+}
+
 function deleteNumber (){
     num = display.textContent;
     display.textContent = num.slice(0,-1);
@@ -59,26 +67,47 @@ function deleteNumber (){
 
 function clearAll(){
     display.textContent = '0';
+    firstNumber = '';
+    secondNumber = '';
+    operator = '';
+    resetSwitich = false;
+    nextFirstNumber = false;
+    numberCheck = false;
+    signCheck = false;
 }
 
-function numberStorage (sign){
+//checks if number was added before adding operators, and add bootlean to ensure equalBtn is active when it makes sense.
+function operatorCheck(sign){
+    if (numberCheck === false){
+        return
+    }
+    numberCheck = false;
+    signCheck = true;
+    operator = sign;
+    return numberStorage();
+}
+
+function numberStorage (){
     if (firstNumber === ''){
-        operator = sign;
         resetSwitich = true;
         return firstNumber = display.textContent;
-    }else if (secondNumber === ''){
+    //If equation has more than 1 operators, this will calculate the two numbers and use the answer as firstNumber
+    }else (secondNumber === '')
         nextFirstNumber = true;
         return equalBtn();
-    }else console.log('numberstorage error')
 }
 
 function equalBtn(){
+//checks if sign was added
+    if (signCheck === false){
+        return
+    }
     secondNumber = display.textContent;
     resetSwitich = true;
     return calculate(firstNumber, operator, secondNumber);
 }
 
-function resetDisplay(){
+function resetStorage(){
     firstNumber = '';
     secondNumber = '';
     if (nextFirstNumber === true){
@@ -94,27 +123,27 @@ function calculate (firstNumber, operator, secondNumber){
         let num2 = Number(secondNumber);
         answer = num1 + num2;
         display.textContent = answer;
-        return resetDisplay();
+        return resetStorage();
     } else if (operator === '-'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 - num2;
         display.textContent = answer
-        return resetDisplay();
+        return resetStorage();
     } else if (operator === 'x'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 * num2;
         display.textContent = answer
-        return resetDisplay();
+        return resetStorage();
     }else (operator === '/')
         if (secondNumber === '0'){
             display.textContent = 'ERROR'
-            return resetDisplay();
+            return resetStorage();
         }
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 / num2;
         display.textContent = answer
-        return resetDisplay();
+        return resetStorage();
 }
