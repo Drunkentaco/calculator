@@ -8,30 +8,33 @@ let numberCheck = false;
 let signCheck = false;
 
 //button selectors
-const clear = document.querySelector('#clearBtn');
-clear.addEventListener('click', () =>{clearAll()});
-
-const delBtn = document.querySelector('#deleteBtn');
-delBtn.addEventListener('click', () => {deleteNumber()});
-
-const equal = document.querySelector('#equalBtn');
-equal.addEventListener('click', () => {equalBtn()});
-
 const numberBtn = document.querySelectorAll('.numberBtn');
+const operatorBtn = document.querySelectorAll('.operator');
+const equal = document.querySelector('#equalBtn');
+const clear = document.querySelector('#clearBtn');
+const delBtn = document.querySelector('#deleteBtn');
+const display = document.querySelector('#display');
+const keyboard = document.querySelector('body');
+
+//event listeners
+equal.addEventListener('click', equalBtn);
+clear.addEventListener('click', clearAll);
+delBtn.addEventListener('click', deleteNumber);
+keyboard.addEventListener('keydown', keyboardInput)
+display.textContent = 0;
+
 numberBtn.forEach((button) => {
     button.addEventListener('click',() => {
         numberCheck = true;
         displayNumber(button.name);
     });
 });
-const operatorBtn = document.querySelectorAll('.operator');
+
 operatorBtn.forEach((button) =>{
     button.addEventListener('click',() =>{
         operatorCheck(button.name);
     })
 })
-const display = document.querySelector('#display');
-display.textContent = 0;
 
 function displayNumber(num) {
     //reset display after confirming firstNumber
@@ -98,7 +101,7 @@ function numberStorage (){
 }
 
 function equalBtn(){
-//checks if sign was added
+    //checks if sign was added
     if (signCheck === false){
         return
     }
@@ -110,6 +113,7 @@ function equalBtn(){
 function resetStorage(){
     firstNumber = '';
     secondNumber = '';
+    //If equation has more than 1 operators, this will calculate the two numbers and use the answer as firstNumber
     if (nextFirstNumber === true){
         nextFirstNumber = false;
         firstNumber = display.textContent;
@@ -130,7 +134,7 @@ function calculate (firstNumber, operator, secondNumber){
         answer = num1 - num2;
         display.textContent = answer
         return resetStorage();
-    } else if (operator === 'x'){
+    } else if (operator === '*' || operator === 'x'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 * num2;
@@ -146,4 +150,15 @@ function calculate (firstNumber, operator, secondNumber){
         answer = num1 / num2;
         display.textContent = answer
         return resetStorage();
+}
+
+function keyboardInput(e){
+    if((e.key >= '0' && e.key <= '9') || e.key === '.') {
+        numberCheck = true;
+        displayNumber(e.key);
+    }
+    if(e.key === '+' || e.key === '-' || e.key === '*'|| e.key === 'x' || e.key === '/') operatorCheck(e.key);
+    if(e.key === '=') equalBtn(e.key);
+    if(e.key === 'Escape') clearAll(e.key);
+    if(e.key === 'Backspace' || e.key === 'Delete') deleteNumber(e.key);
 }
