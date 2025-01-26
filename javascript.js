@@ -1,8 +1,8 @@
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
-let resetSwitich = false
-let nextFirstNumber = '';
+let resetSwitich = false;
+let nextFirstNumber = false;
 
 
 //button selectors
@@ -62,26 +62,30 @@ function clearAll(){
 }
 
 function numberStorage (sign){
-    if (nextFirstNumber !== ''){
-        firstNumber = nextFirstNumber;
-        nextFirstNumber === '';
-    }
     if (firstNumber === ''){
         operator = sign;
         resetSwitich = true;
         return firstNumber = display.textContent;
-    } else if (secondNumber === ''){
-        nextFirstNumber = calculate (firstNumber, operator, secondNumber)
-        equalbtn();
-    }
+    }else if (secondNumber === ''){
+        nextFirstNumber = true;
+        return equalBtn();
+    }else console.log('numberstorage error')
 }
 
 function equalBtn(){
     secondNumber = display.textContent;
     resetSwitich = true;
-    calculate(firstNumber, operator, secondNumber);
+    return calculate(firstNumber, operator, secondNumber);
 }
 
+function resetDisplay(){
+    firstNumber = '';
+    secondNumber = '';
+    if (nextFirstNumber === true){
+        nextFirstNumber = false;
+        firstNumber = display.textContent;
+    }
+}
 
 // Basic arithmetic operation
 function calculate (firstNumber, operator, secondNumber){
@@ -89,22 +93,28 @@ function calculate (firstNumber, operator, secondNumber){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 + num2;
-        display.textContent = answer; 
+        display.textContent = answer;
+        return resetDisplay();
     } else if (operator === '-'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
-        console.log(operator)
         answer = num1 - num2;
         display.textContent = answer
+        return resetDisplay();
     } else if (operator === 'x'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 * num2;
         display.textContent = answer
-    }else if (operator === '/'){
+        return resetDisplay();
+    }else (operator === '/')
+        if (secondNumber === '0'){
+            display.textContent = 'ERROR'
+            return resetDisplay();
+        }
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
-        answer = num1 * num2;
+        answer = num1 / num2;
         display.textContent = answer
-    }else console.log('operate error');
+        return resetDisplay();
 }
