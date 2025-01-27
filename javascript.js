@@ -45,17 +45,17 @@ function displayNumber(num) {
     // Keep numbers to 10 digits
     if (display.textContent.length < 10){
     //Ensure that you don't add another '0' on top of the '0'
-    if(display.textContent === '0'){
-        deleteNumber();
-    }
-    //adds a '0' after the '.'
-    if (num === '.'){
-        if (display.textContent.includes('.')) return;
-        if (display.textContent.length <= 0){
-            display.textContent = '0';
+        if(display.textContent === '0'){
+            deleteNumber();
         }
-    }
-    display.textContent += num;
+        // Adds a '0' after the '.'
+        if (num === '.'){
+            if (display.textContent.includes('.')) return;
+            if (display.textContent.length <= 0){
+                display.textContent = '0';
+            }
+        }
+        display.textContent += num;
    }
 }
 
@@ -122,20 +122,19 @@ function resetStorage(){
 
 // Deals with floating point number not always 100% accurate.
 function roundResult(number){
-    answer = Math.round(number * 100000000) / 100000000
+    answer = Math.round(number * 100000000) / 100000000;
+    display.textContent = answer
     return scientificNotation(answer);
 }
 
 // Deals with numbers too big for the display
 function scientificNotation(number){
-    if (number.length > 10){
-        answer = number.toExponential(4)
-        display.textContent = answer
+    if (display.textContent.length > 10){
+        answer = number.toExponential(4);
+        display.textContent = answer;
         return resetStorage();
-    }
-    display.textContent = answer;
-    return resetStorage();
-    
+    }else 
+    return resetStorage();  
 }
 
 // Basic arithmetic operation
