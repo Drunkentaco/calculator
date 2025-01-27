@@ -120,26 +120,41 @@ function resetStorage(){
     }
 }
 
+// Deals with floating point number not always 100% accurate.
+function roundResult(number){
+    answer = Math.round(number * 100000000) / 100000000
+    return scientificNotation(answer);
+}
+
+// Deals with numbers too big for the display
+function scientificNotation(number){
+    if (number.length > 10){
+        answer = number.toExponential(4)
+        display.textContent = answer
+        return resetStorage();
+    }
+    display.textContent = answer;
+    return resetStorage();
+    
+}
+
 // Basic arithmetic operation
 function calculate (firstNumber, operator, secondNumber){
     if (operator === '+'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
-        answer = num1 + num2;
-        display.textContent = answer;
-        return resetStorage();
+        answer = num1 + num2;;
+        return roundResult(answer);
     } else if (operator === '-'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 - num2;
-        display.textContent = answer
-        return resetStorage();
+        return roundResult(answer);
     } else if (operator === '*' || operator === 'x'){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 * num2;
-        display.textContent = answer
-        return resetStorage();
+        return roundResult(answer);
     }else (operator === '/')
         if (secondNumber === '0'){
             display.textContent = 'ERROR'
@@ -148,8 +163,8 @@ function calculate (firstNumber, operator, secondNumber){
         let num1 = Number(firstNumber);
         let num2 = Number(secondNumber);
         answer = num1 / num2;
-        display.textContent = answer
-        return resetStorage();
+        display.textContent = answer;
+        return roundResult(answer);
 }
 
 function keyboardInput(e){
@@ -158,7 +173,7 @@ function keyboardInput(e){
         displayNumber(e.key);
     }
     if(e.key === '+' || e.key === '-' || e.key === '*'|| e.key === 'x' || e.key === '/') operatorCheck(e.key);
-    if(e.key === '=') equalBtn(e.key);
+    if(e.key === '=' || e.key === 'Enter') equalBtn(e.key);
     if(e.key === 'Escape') clearAll(e.key);
     if(e.key === 'Backspace' || e.key === 'Delete') deleteNumber(e.key);
 }
